@@ -1,0 +1,48 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{% static 'css/headerstyle.css' %}">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    {% block styles %}
+    {{ flatpage.content }}
+    {% endblock styles %}
+</head>
+
+<body>
+    <header>
+        <div>
+            <a href="/"><img class="Logo_img" src="{% static 'img/Logo_1.png' %}" alt="Logo"/></a>
+        </div>
+        <div class ="Header_text">
+            +7-8352-20-12-09, telegram <br>
+            <h1>Электронная сервисная книжка "Мой Силант"</h1>
+        </div>
+        <div class="Header_auth">
+            {% if request.user.is_authenticated %}
+                Вы зашли как: <div class="Account">{{ request.user.first_name }}</div>
+                <a href = '/accounts/logout'>    Выйти </a> <br>
+            {% else %}
+                <a href = '/accounts/login'> Войти </a>
+                {% endif %}
+        </div>
+    </header>
+
+    <main>
+    {% block content %}
+    {{ flatpage.content }}
+    {% endblock content %}
+    </main>
+
+    <footer>
+        <div>
+            +7-8352-20-12-09, telegram
+        </div>
+        <div>
+            Мой Силант 2022
+        </div>
+    </footer>
+
+</body>
+
+</html>
