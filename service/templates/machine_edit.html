@@ -1,0 +1,167 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/edit.css' %}">
+{% endblock styles %}
+
+
+{% block content %}
+{% if request.user.is_superuser or request.user|is_group:"managers" %}
+
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <div class="Main_top">
+
+    <table>
+        <tr>
+            <td class="First_td">
+                Зав. № машины
+            </td>
+            <td class="Second_td">
+                {{ form.factory_number }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Модель техники
+            </td>
+            <td>
+                {{ form.tech_model }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Модель двигателя
+            </td>
+            <td>
+                {{ form.engine_model }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Зав. № двигателя
+            </td>
+            <td>
+                {{ form.factory_engine }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Модель трансмиссии
+            </td>
+            <td>
+                {{ form.transmission_model }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Зав. № трансмиссии
+            </td>
+            <td>
+                {{ form.factory_transmission }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Модель ведущего моста
+            </td>
+            <td>
+                {{ form.main_bridge_model }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Зав. № ведущего моста
+            </td>
+            <td>
+                {{ form.factory_main_bridge }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Модель управляемого моста
+            </td>
+            <td>
+                {{ form.control_bridge_model }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Зав. № управляемого моста
+            </td>
+            <td>
+                {{ form.factory_control_bridge }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Договор поставки
+            </td>
+            <td>
+                {{ form.contract }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Дата отгрузки
+            </td>
+            <td>
+                {{ form.delivery_data }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Грузополучатель
+            </td>
+            <td>
+                {{ form.consignee }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Адрес поставки
+            </td>
+            <td>
+                {{ form.address }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Комплектация
+            </td>
+            <td>
+                {{ form.equipment }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Клиент
+            </td>
+            <td>
+                {{ form.client }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Сервисная компания
+            </td>
+            <td>
+                <div class="Select_field">
+                    {{ form.service_company }}
+                </div>
+            </td>
+        </tr>
+    </table>
+        <br><br>
+    <input class="Redirect_button" type="submit" value="Сохранить" />
+    </div>
+</form>
+
+{% else %}
+    <h1 class="h1_title">Вам сюда нельзя</h1>
+{% endif %}
+
+<br><br>
+{% endblock content %}

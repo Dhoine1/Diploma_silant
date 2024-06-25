@@ -1,0 +1,136 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/mainstyle.css' %}">
+{% endblock styles %}
+
+
+{% block content %}
+<div class="Main_top">
+    <div class="Buttons">
+        <div>
+            <button type="" onclick="document.location='.'" class="Redirect_button">на главную</button>
+        </div>
+        <div>
+            <button type="" onclick="document.location='myto'" class="Redirect_button">TO</button>
+        </div>
+        <div>
+            <button type="" onclick="document.location='reclamations'" class="Redirect_button">Рекламации</button>
+        </div>
+    </div>
+    <br><br class="Hidden_on_very_small">
+        {% if request.user.is_superuser or request.user|is_group:"managers" %}
+            <button type="" onclick="document.location='create'" class="Redirect_button">Доб. машину</button>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <button type="" onclick="document.location='create_to'" class="Redirect_button">Добавить TO</button>
+        {% endif %}
+        {% if request.user.is_superuser or request.user|is_group:"managers" or request.user|is_group:"service_organization" %}
+            <button type="" onclick="document.location='create_reclamation'" class="Redirect_button">Доб. рекламацию</button>
+        {% endif %}
+<br>
+<div class="Filter_field">
+    <div><br>
+    <strong>Фильтрация по полям</strong><br><br>
+    <form action="" method="get">
+        <select size="1" name="tech_model">
+            <option selected disabled>Модель техники</option>
+            {% for model in tech_model %}
+            <option value="{{ model.name }}">{{ model.name }}</option>
+            {% endfor %}}
+        </select>
+        <select size="1" name="engine_model">
+            <option selected disabled>Модель двигателя</option>
+            {% for model in engine_model %}
+            <option value="{{ model.name }}">{{ model.name }}</option>
+            {% endfor %}}
+        </select>
+        <br><br class="Hidden_on_very_small">
+        <select size="1" name="transmission_model">
+            <option selected disabled>модель трансмиссии</option>
+            {% for model in transmission_model %}
+            <option value="{{ model.name }}">{{ model.name }}</option>
+            {% endfor %}}
+        </select>
+        <select size="1" name="control_bridge_model">
+            <option selected disabled>модель управляемого моста</option>
+            {% for model in control_bridge_model %}
+            <option value="{{ model.name }}">{{ model.name }}</option>
+            {% endfor %}}
+        </select>
+        <select size="1" name="main_bridge_model">
+            <option selected disabled>модель ведущего моста</option>
+            {% for model in main_bridge_model %}
+            <option value="{{ model.name }}">{{ model.name }}</option>
+            {% endfor %}}
+        </select>
+        <br><br>
+        <button type="submit" class="Search_button">Поиск</button>
+    </form>
+    </div>
+</div>
+<br>
+    <img class="Userpict" src="{% static 'img/mycars.png' %}" alt="my machines picture"/>
+    <h2>Мои машины</h2>
+    <table class="table">
+        <thead>
+            <th>Дата выпуска</th>
+            <th>Заводской номер</th>
+            <th>Модель техники</th>
+            <th class="Hidden_on_very_small">Модель двигателя</th>
+            <th class="Hidden_on_very_small">Модель трансмиссии (производитель, артикул)</th>
+            <th class="Hidden_on_very_small">Модель ведущего моста</th>
+            <th class="Hidden_on_very_small">Модель управляемого моста</th>
+        </thead>
+        <tbody>
+            {% for machine in machine %}
+                <tr onclick="document.location='machine/{{ machine.id }}'">
+                    <td>
+                        {{ machine.delivery_data }}
+                    </td>
+                    <td>
+                        {{ machine.factory_number }}
+                    </td>
+                    <td>
+                        {{ machine.tech_model }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ machine.engine_model }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ machine.transmission_model }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ machine.main_bridge_model }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ machine.control_bridge_model }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" align="center"> <h3>По вашему запросу ничего не найдено</h3></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+        {% if page_obj.has_previous %}
+			<a href="?page=1">1</a>
+			{% if page_obj.previous_page_number != 1 %}
+				...
+				<a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+			{% endif %}
+		{% endif %}
+
+		{{ page_obj.number }}
+		{% if page_obj.has_next %}
+			<a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+			{% if paginator.num_pages != page_obj.next_page_number %}
+				...
+				<a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+			{% endif %}
+		{% endif %}
+</div>
+{% endblock content %}

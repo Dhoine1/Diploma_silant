@@ -1,0 +1,135 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/mainstyle.css' %}">
+{% endblock styles %}
+
+
+{% block content %}
+<div class="Main_section">
+    <div class="Main_top">
+
+        {% if request.user.is_authenticated %}
+            <img class="Userpict" src="{% static 'img/user.png' %}" alt="userpict" />
+            <h1>
+                {% if request.user|is_group:"managers" %}
+                    Менеджер:
+                {% elif request.user|is_group:"service_organization" %}
+                    Сервисная компания:
+                {% elif request.user|is_group:"client" %}
+                    Клиент:
+                {% endif %}
+                "{{ request.user.first_name }}"
+            </h1><br class="Hidden_on_very_small">
+
+            <h3>Информация о комплектации и технических характеристиках Вашей техники</h3><br>
+            <div class="Buttons">
+                <div>
+                    <button type="" onclick="document.location='mymachines'" class="Redirect_button">Мои машины</button>
+                </div>
+                <div>
+                    <button type="" onclick="document.location='myto'" class="Redirect_button">TO</button>
+                </div>
+                <div>
+                    <button type="" onclick="document.location='reclamations'" class="Redirect_button">Рекламации</button>
+                </div>
+            </div>
+            <br><br class="Hidden_on_very_small">
+        {% else %}
+            <h3>Проверьте комплектацию и технические характеристики техники Силант</h3><br>
+        {% endif %}
+
+        {% if request.user.is_superuser or request.user|is_group:"managers" %}
+            <button type="" onclick="document.location='create'" class="Redirect_button">Доб. машину</button>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <button type="" onclick="document.location='create_to'" class="Redirect_button">Добавить TO</button>
+        {% endif %}
+        {% if request.user.is_superuser or request.user|is_group:"managers" or request.user|is_group:"service_organization" %}
+            <button type="" onclick="document.location='create_reclamation'" class="Redirect_button">Доб. рекламацию</button>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+        <br>  <br>  <br class="Hidden_on_very_small">
+        {% endif %}
+     <form action="" method="get">
+             <input type="text" class="Factory_number" name="factory_number" placeholder="Заводской номер">
+             <button type="submit" class="Search_button">Поиск</button>
+     </form><br>
+     </div>
+    <table class="table">
+        <thead>
+            <th>Модель техники</th>
+            <th>Зав. № машины</th>
+            <th>Модель двигателя</th>
+            <th class="Hidden_on_small">Зав. № двигателя</th>
+            <th class="Hidden_on_very_small">Модель трансмиссии (производитель, артикул)</th>
+            <th class="Hidden_on_small">Зав. № трансмиссии</th>
+            <th class="Hidden_on_very_small">Модель ведущего моста</th>
+            <th class="Hidden_on_small">Зав. № ведущего моста</th>
+            <th class="Hidden_on_very_small">Модель управляемого моста</th>
+            <th class="Hidden_on_small">Зав. № управляемого моста</th>
+        </thead>
+        <tbody>
+            {% for machine in machine %}
+                <tr onclick="document.location='machine/{{ machine.id }}'">
+                    <td>
+                        {{ machine.tech_model }}
+                    </td>
+                    <td>
+                        {{ machine.factory_number }}
+                    </td>
+                    <td>
+                        {{ machine.engine_model }}
+                    </td>
+                    <td class="Hidden_on_small">
+                        {{ machine.factory_engine }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ machine.transmission_model }}
+                    </td>
+                    <td class="Hidden_on_small">
+                        {{ machine.factory_transmission }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ machine.main_bridge_model }}
+                    </td>
+                    <td class="Hidden_on_small">
+                        {{ machine.factory_main_bridge }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ machine.control_bridge_model }}
+                    </td>
+                    <td class="Hidden_on_small">
+                        {{ machine.factory_control_bridge }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="10" align="center"> <h3>По вашему запросу ничего не найдено</h3></td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+        {% if page_obj.has_previous %}
+			<a href="?page=1">1</a>
+			{% if page_obj.previous_page_number != 1 %}
+				...
+				<a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+			{% endif %}
+		{% endif %}
+
+		{{ page_obj.number }}
+		{% if page_obj.has_next %}
+			<a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+			{% if paginator.num_pages != page_obj.next_page_number %}
+				...
+				<a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+			{% endif %}
+		{% endif %}
+</div>
+
+{% endblock content %}
+

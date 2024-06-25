@@ -1,0 +1,92 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_tags %}
+
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/machine_view_style.css' %}">
+{% endblock styles %}
+
+{% block content %}
+    <div class="Main_section">
+
+            <div class="Buttons">
+                <div>
+                    <button type="" onclick="document.location='../mymachines'" class="Redirect_button">Мои машины</button>
+                </div>
+                <div>
+                    <button type="" onclick="document.location='../myto'" class="Redirect_button">TO</button>
+                </div>
+                <div>
+                    <button type="" onclick="document.location='../reclamations'" class="Redirect_button">Рекламации</button>
+                </div>
+            </div>
+            <br class="Hidden_on_very_small"><br class="Hidden_on_very_small">
+
+{% if request.user.is_superuser or request.user|is_group:"managers" or object.service_company.id == request.user.id or object.machine.client.id == request.user.id %}
+       <div class="Title"><h1>Рекламация на машину {{ reclamations_view.machine.factory_number }}
+                                дата отказа {{ reclamations_view.date }}</h1></div>
+    </div>
+    <table class="table">
+        <thead>
+            <th>Параметр</th>
+            <th>Описание</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Дата отказа</td>
+            <td>{{ reclamations_view.date }}</td>
+          </tr>
+          <tr>
+            <td>Наработка (м/час)</td>
+            <td>{{ reclamations_view.work_time }}</td>
+          </tr>
+          <tr>
+            <td>Узел отказа</td>
+            <td>{{ reclamations_view.node }}</td>
+          </tr>
+          <tr>
+            <td>Описание узла</td>
+            <td>{{ reclamations_view.node.description }}</td>
+          </tr>
+          <tr>
+            <td>Описание отказа</td>
+            <td>{{ reclamations_view.description }}</td>
+          </tr>
+          <tr>
+            <td>Mетод восстановления</td>
+            <td>{{ reclamations_view.recovery_method }}</td>
+          </tr>
+          <tr>
+            <td>Описание метода</td>
+            <td>{{ reclamations_view.recovery_method.description }}</td>
+          </tr>
+          <tr>
+            <td>Используемые запчасти</td>
+            <td>{{ reclamations_view.repair_parts }}</td>
+          </tr>
+          <tr>
+            <td>Дата восстановления</td>
+            <td>{{ reclamations_view.repair_date }}</td>
+          </tr>
+          <tr>
+            <td>Время простоя техники</td>
+            <td>{{ reclamations_view.downtime }}</td>
+          </tr>
+          <tr>
+            <td>Сервисная компания</td>
+            <td>{{ reclamations_view.service_company.first_name }}</td>
+          </tr>
+        </tbody>
+    </table><br class="Hidden_on_very_small"><br class="Hidden_on_very_small">
+    {% if reclamations_view.service_company.id == request.user.id or request.user.is_superuser or request.user|is_group:"managers" %}
+    <div>
+        <button type="" onclick="document.location='./{{ reclamations_view.id }}/edit'" class="Redirect_button">Изменить</button>
+        <button type="" onclick="document.location='./{{ reclamations_view.id }}/delete'" class="Redirect_button">Удалить</button>
+    </div>
+
+    {% endif %}
+
+{% else %}
+    <h1 class="h1_title">Вам сюда нельзя</h1>
+{% endif %}
+{% endblock content %}

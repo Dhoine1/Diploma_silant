@@ -1,0 +1,68 @@
+.Main_section {
+    background: #EBE6D6;
+    font-family: Astra;
+}
+
+.Title {
+    padding: 30px;
+    text-align: center;
+}
+
+.table {
+	width: 100%;
+	border: none;
+	margin-bottom: 20px;
+	font-family: Astra;
+}
+
+.table thead th {
+	padding: 10px;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 20px;
+	text-align: left;
+	color: #163E6C;
+	border-top: 2px solid #163E6C;
+	border-bottom: 2px solid #163E6C;
+}
+
+.table tbody td {
+	padding: 10px;
+	font-size: 14px;
+	line-height: 20px;
+	border-top: 1px solid #163E6C;
+}
+
+.Redirect_button {
+	width: 150px;
+	height: 50px;
+	color: #EBE6D6;
+	background-color: #163E6C;
+	margin: 0 15px 0 15px;
+	font-size: 18px;
+	border-radius: 25px;
+}
+
+.Redirect_button:hover {
+	background-color: #D20A11;
+}
+
+.Buttons {
+	display: flex;
+	justify-content: center;
+}
+
+@media screen and (max-width: 750px) {
+	.Hidden_on_very_small {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 550px) {
+	.Redirect_button {
+		width: 100px;
+		height: 20px;
+		margin: 0 5px 0 0;
+		font-size: 10px;
+	}
+}

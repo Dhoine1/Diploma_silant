@@ -1,0 +1,122 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/mainstyle.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<div class="Main_top">
+    <div class="Buttons">
+        <div>
+            <button type="" onclick="document.location='mymachines'" class="Redirect_button">Мои машины</button>
+        </div>
+        <div>
+            <button type="" onclick="document.location='.'" class="Redirect_button">на главную</button>
+        </div>
+        <div>
+            <button type="" onclick="document.location='reclamations'" class="Redirect_button">Рекламации</button>
+        </div>
+    </div>
+    <br><br class="Hidden_on_very_small">
+        {% if request.user.is_superuser or request.user|is_group:"managers" %}
+            <button type="" onclick="document.location='create'" class="Redirect_button">Доб. машину</button>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <button type="" onclick="document.location='create_to'" class="Redirect_button">Добавить TO</button>
+        {% endif %}
+        {% if request.user.is_superuser or request.user|is_group:"managers" or request.user|is_group:"service_organization" %}
+            <button type="" onclick="document.location='create_reclamation'" class="Redirect_button">Доб. рекламацию</button>
+        {% endif %}
+<div class="Filter_field">
+    <div><br>
+        <strong>Фильтрация по полям</strong>
+        <br><br>
+        <form action="" method="get">
+            <select size="1" name="type">
+                <option selected disabled>Вид ТО</option>
+                {% for model in type %}
+                <option value="{{ model.name }}">{{ model.name }}</option>
+                {% endfor %}
+            </select>
+            <select size="1" name="machine">
+                <option selected disabled>Заводской номер машины</option>
+                {% for model in machine %}
+                <option value="{{ model.factory_number }}">{{ model.factory_number }}</option>
+                {% endfor %}
+            </select>
+            <select size="1" name="organization">
+                <option selected disabled>Cервисная компания</option>
+                {% for model in organization %}
+                <option value="{{ model.name }}">{{ model.name }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <button type="submit" class="Search_button">Поиск</button>
+        </form>
+    </div>
+</div>
+<br>
+    <img class="Userpict" src="{% static 'img/to.png' %}" alt="my T O picture"/>
+<h2>Мои T O</h2>
+<table class="table">
+    <thead>
+        <th>Вид ТО</th>
+        <th>Дата проведения ТО</th>
+        <th class="Hidden_on_very_small">Наработка (м/час)</th>
+        <th class="Hidden_on_very_small">Номер заказ-наряда</th>
+        <th class="Hidden_on_very_small">Дата заказ-наряда</th>
+        <th class="Hidden_on_very_small">Организация проводившая ТО</th>
+        <th>Машина</th>
+    </thead>
+        <tbody>
+            {% for to in to %}
+            <tr onclick="document.location='myto/{{ to.id }}'">
+                 <td>
+                        {{ to.type }}
+                    </td>
+                    <td>
+                        {{ to.date }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ to.operating_time }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ to.order_number }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ to.order_date }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ to.organization }}
+                    </td>
+                    <td>
+                        {{ to.machine.factory_number }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="7" align="center"> <h3>По вашему запросу ничего не найдено</h3></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+        {% if page_obj.has_previous %}
+			<a href="?page=1">1</a>
+			{% if page_obj.previous_page_number != 1 %}
+				...
+				<a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+			{% endif %}
+		{% endif %}
+
+		{{ page_obj.number }}
+		{% if page_obj.has_next %}
+			<a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+			{% if paginator.num_pages != page_obj.next_page_number %}
+				...
+				<a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+			{% endif %}
+		{% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,118 @@
+@font-face {
+    src: url(../fonts/PT-Astra-Sans_Regular.ttf);
+	  font-family: 'Astra';
+}
+
+body {
+    background: #EBE6D6;
+    font-family: Astra;
+}
+
+header {
+    color: #163E6C;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.Logo_img {
+    height: 100px;
+    weight: 197px;
+    padding: 20px;
+}
+
+.Header_text {
+    padding: 20px;
+    font-size: 2em;
+    text-align: center;
+}
+
+.Header_text h1 {
+    font-size: 1em;
+}
+
+.Header_auth {
+    padding: 20px;
+    font-size: 2em;
+    text-align: center;
+}
+
+.Header_auth a {
+    text-decoration: none;
+    color: #163E6C;
+}
+
+.Header_auth a:hover {
+    color: #D20A11;
+}
+
+.Account {
+    color: #D20A11;
+    font-size: 1em;
+}
+
+footer {
+    color: #163E6C;
+    display: flex;
+    justify-content: space-around;
+    font-size: 2em;
+    margin-top: 30px;
+}
+
+@media screen and (max-width: 1000px) {
+    header {
+        margin-bottom: 10px;
+    }
+
+    .Logo_img {
+        height: 50px;
+        weight: 100px;
+        padding: 10px;
+    }
+
+    .Header_text {
+        padding: 10px;
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    .Header_text h1 {
+        font-size: 1em;
+    }
+
+    .Header_auth {
+        padding: 10px;
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    footer {
+        font-size: 1.5em;
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .Header_text {
+        font-size: 1em;
+    }
+
+    .Header_auth {
+        font-size: 1em;
+    }
+
+    .Logo_img {
+        height: 25px;
+        weight: 50px;
+
+    }
+
+    h1 {
+        font-size: 1em;
+    }
+
+    footer {
+        font-size: 1em;
+        margin-top: 10px;
+    }
+}

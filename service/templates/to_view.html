@@ -1,0 +1,84 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_tags %}
+
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/machine_view_style.css' %}">
+{% endblock styles %}
+
+{% block content %}
+    <div class="Main_section">
+
+
+            <div class="Buttons">
+                <div>
+                    <button type="" onclick="document.location='../mymachines'" class="Redirect_button">Мои машины</button>
+                </div>
+                <div>
+                    <button type="" onclick="document.location='../myto'" class="Redirect_button">TO</button>
+                </div>
+                <div>
+                    <button type="" onclick="document.location='../reclamations'" class="Redirect_button">Рекламации</button>
+                </div>
+            </div>
+            <br class="Hidden_on_very_small"><br class="Hidden_on_very_small">
+
+{% if object.machine.client.id == request.user.id or request.user.is_superuser or request.user|is_group:"managers" or object.machine.service_company.client.id == request.user.id %}
+       <div class="Title"><h1>TO № {{ to_view.order_number }}</h1></div>
+    </div>
+    <table class="table">
+        <thead>
+            <th>Параметр</th>
+            <th>Описание</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Вид ТО</td>
+            <td>{{ to_view.type }}</td>
+          </tr>
+          <tr>
+            <td>Описание ТО</td>
+            <td>{{ to_view.type.description }}</td>
+          </tr>
+          <tr>
+            <td>Дата проведения ТО</td>
+            <td>{{ to_view.date }}</td>
+          </tr>
+          <tr>
+            <td>Наработка (м/час)</td>
+            <td>{{ to_view.operating_time }}</td>
+          </tr>
+          <tr>
+            <td>Номер заказ-наряда</td>
+            <td>{{ to_view.order_number }}</td>
+          </tr>
+          <tr>
+            <td>Дата заказ-наряда</td>
+            <td>{{ to_view.order_date }}</td>
+          </tr>
+          <tr>
+            <td>Сервисная организация</td>
+            <td>{{ to_view.machine.service_company }}</td>
+          </tr>
+          <tr>
+            <td>Организация проводившая ТО</td>
+            <td>{{ to_view.organization }}</td>
+          </tr>
+          <tr>
+            <td>Машина</td>
+            <td>{{ to_view.machine }}</td>
+          </tr>
+        </tbody>
+    </table><br><br class="Hidden_on_very_small">
+    {% if to_view.machine.client.id == request.user.id or to_view.machine.service_company.client.id == request.user.id or request.user.is_superuser or request.user|is_group:"managers" %}
+    <div>
+        <button type="" onclick="document.location='./{{ to_view.id }}/edit'" class="Redirect_button">Изменить</button>
+        <button type="" onclick="document.location='./{{ to_view.id }}/delete'" class="Redirect_button">Удалить ТО</button>
+    </div>
+
+    {% endif %}
+
+    {% else %}
+         <h1 class="h1_title">Вам сюда нельзя</h1>
+    {% endif %}
+{% endblock content %}

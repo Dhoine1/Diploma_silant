@@ -1,0 +1,140 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_tags %}
+
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/machine_view_style.css' %}">
+{% endblock styles %}
+
+{% block content %}
+    <div class="Main_section">
+        {% if request.user.is_authenticated %}
+            <div class="Buttons">
+                <div>
+                    <button type="" onclick="document.location='../mymachines'" class="Redirect_button">Мои машины</button>
+                </div>
+                <div>
+                    <button type="" onclick="document.location='../myto'" class="Redirect_button">TO</button>
+                </div>
+                <div>
+                    <button type="" onclick="document.location='../reclamations'" class="Redirect_button">Рекламации</button>
+                </div>
+            </div>
+            <br class="Hidden_on_very_small">
+        {% endif %}
+
+       <div class="Title"><h1>Характеристики машины № {{ machine_view.factory_number }}</h1></div>
+    </div>
+    <table class="table">
+        <thead>
+            <th>Параметр</th>
+            <th>Описание</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Заводкой номер машины</td>
+                <td>{{ machine_view.factory_number }}</td>
+            </tr>
+            <tr>
+                <td>Модель техники</td>
+                <td>{{ machine_view.tech_model }}</td>
+            </tr>
+            <tr>
+                <td>Описание модели</td>
+                <td>{{ machine_view.tech_model.description }}</td>
+            </tr>
+            <tr>
+                <td>Модель двигателя</td>
+                <td>{{ machine_view.engine_model }}</td>
+            </tr>
+            <tr>
+                <td>Описание модели</td>
+                <td>{{ machine_view.engine_model.description }}</td>
+            </tr>
+            <tr>
+                <td>Зав. № двигателя</td>
+                <td>{{ machine_view.factory_engine }}</td>
+            </tr>
+            <tr>
+                <td>Модель трансмиссии</td>
+                <td>{{ machine_view.transmission_model }}</td>
+            </tr>
+            <tr>
+                <td>Описание модели</td>
+                <td>{{ machine_view.transmission_model.description }}</td>
+            </tr>
+            <tr>
+                <td>Зав. № трансмиссии</td>
+                <td>{{ machine_view.factory_transmission }}</td>
+            </tr>
+            <tr>
+                <td>Модель ведущего моста</td>
+                <td>{{ machine_view.main_bridge_model }}</td>
+            </tr>
+            <tr>
+                <td>Описание модели</td>
+                <td>{{ machine_view.main_bridge_model.description }}</td>
+            </tr>
+            <tr>
+                <td>Зав. № ведущего моста</td>
+                <td>{{ machine_view.factory_main_bridge }}</td>
+            </tr>
+            <tr>
+                <td>Модель управляемого моста</td>
+                <td>{{ machine_view.control_bridge_model }}</td>
+            </tr>
+            <tr>
+                <td>Описание модели</td>
+                <td>{{ machine_view.control_bridge_model.description }}</td>
+            </tr>
+            <tr>
+                <td>Зав. № управляемого моста</td>
+                <td>{{ machine_view.factory_control_bridge }}</td>
+            </tr>
+
+            {% if request.user.is_superuser or request.user.id == machine_view.client_id or machine_view.service_company.client.id == request.user.id or request.user|is_group:"managers" %}
+            <tr>
+                <td>Договор поставки №, дата</td>
+                <td>{{ machine_view.contract }}</td>
+            </tr>
+            <tr>
+                <td>Дата отгрузки с завода</td>
+                <td>{{ machine_view.delivery_data }}</td>
+            </tr>
+            <tr>
+                <td>Грузополучатель (конечный потребитель)</td>
+                <td>{{ machine_view.consignee }}</td>
+            </tr>
+            <tr>
+                <td>Адрес поставки</td>
+                <td>{{ machine_view.address }}</td>
+            </tr>
+            <tr>
+                <td>Комплектация (доп. опции)</td>
+                <td>{{ machine_view.equipment }}</td>
+            </tr>
+            <tr>
+                <td>Клиент</td>
+                <td>{{ machine_view.client.first_name }}</td>
+            </tr>
+            <tr>
+                <td>Сервисная компания</td>
+                <td>{{ machine_view.service_company }}</td>
+            </tr>
+            <tr>
+                <td>Контакты</td>
+                <td>{{ machine_view.service_company.description }}</td>
+            </tr>
+            {% endif %}
+
+        </tbody>
+    </table><br class="Hidden_on_very_small">
+    {% if request.user.is_superuser or request.user|is_group:"managers" %}
+    <div>
+        <button type="" onclick="document.location='./{{ machine_view.id }}/edit'" class="Redirect_button">Изменить</button>
+        <button type="" onclick="document.location='./{{ machine_view.id }}/delete'" class="Redirect_button">Удалить</button>
+    </div>
+
+    {% endif %}
+
+{% endblock content %}

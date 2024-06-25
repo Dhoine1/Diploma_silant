@@ -1,0 +1,24 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/mainstyle.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<br><br><br>
+<div class="Main_top">
+   {% if object.machine.client.id == request.user.id or request.user.is_superuser or request.user|is_group:"managers" or object.machine.service_company.client.id == request.user.id %}
+        <h1 class="h1_title">Вы уверены, что хотите удалить {{ object.type }} для машины  {{ object.machine.factory_number }}?</h1>
+
+        <form action="" method="post">
+            {% csrf_token %}
+        <input class="Redirect_button" type="submit" value="Delete" id="delete" />
+        </form>
+    {% else %}
+         <h1 class="h1_title">Вам сюда нельзя</h1>
+    {% endif %}
+</div>
+<br><br><br><br><br>
+{% endblock content %}

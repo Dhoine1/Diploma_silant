@@ -1,0 +1,97 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/edit.css' %}">
+{% endblock styles %}
+
+
+{% block content %}
+
+{% if request.user.is_superuser or request.user|is_group:"managers" or object.service_company.id == request.user.id or enable_create %}
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <div class="Main_top">
+    <table>
+        <tr>
+            <td class="First_td">
+                Дата отказа
+            </td>
+            <td>
+                {{ form.date }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Наработка (м/час)
+            </td>
+            <td>
+                {{ form.work_time }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Узел отказа
+            </td>
+            <td>
+                {{ form.node }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Описание отказа
+            </td>
+            <td>
+                {{ form.description }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Метод восстановления
+            </td>
+            <td>
+                {{ form.recovery_method }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Используемые запчасти
+            </td>
+            <td>
+                {{ form.repair_parts }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Дата восстановления
+            </td>
+            <td>
+                {{ form.repair_date }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Машина
+            </td>
+            <td>
+                <select size="1" name="machine" required id="id_machine">
+                {% for model in client_machine %}
+                <option value="{{ model.id }}">{{ model }}</option>
+                {% endfor %}
+        </select>
+            </td>
+        </tr>
+
+    </table><br><br>
+    <input class="Redirect_button" type="submit" value="Сохранить" />
+    </div>
+</form>
+
+{% else %}
+    <h1 class="h1_title">Вам сюда нельзя</h1>
+{% endif %}
+
+<br><br>
+{% endblock content %}

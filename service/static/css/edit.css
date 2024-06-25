@@ -1,0 +1,70 @@
+.Main_section {
+    background: #EBE6D6;
+    font-family: Astra;
+}
+
+.Main_top {
+	text-align: center;
+	font-family: Astra;
+	color: #163E6C;
+}
+
+.Redirect_button {
+	width: 150px;
+	height: 50px;
+	color: #EBE6D6;
+	background-color: #163E6C;
+	margin: 0 15px 0 15px;
+	font-size: 18px;
+	border-radius: 25px;
+}
+
+.Redirect_button:hover {
+	background-color: #D20A11;
+}
+
+table {
+    width : 620px;
+    table-layout: fixed;
+	margin: auto;
+}
+
+.First_td {
+	text-align: left;
+    width: 200px;
+}
+
+@media screen and (max-width: 750px) {
+	.Redirect_button {
+		width: 150px;
+		height: 30px;
+		margin: 0 10px 0 0;
+		font-size: 12px;
+	}
+
+	.Select_field {
+    	width: 177px;
+	}
+}
+
+@media screen and (max-width: 550px) {
+	table {
+    	width : 450px;
+	}
+
+	.First_td {
+		width: 150px;
+	}
+}
+
+
+@media screen and (max-width: 500px) {
+	table {
+    	width : 350px;
+		margin: 0;
+	}
+
+	.Second_td{
+		width : 200px;
+	}
+}

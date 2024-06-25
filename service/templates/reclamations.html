@@ -1,0 +1,120 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% load custom_tags %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/mainstyle.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<div class="Main_top">
+    <div class="Buttons">
+            <div>
+                <button type="" onclick="document.location='mymachines'" class="Redirect_button">Мои машины</button>
+            </div>
+            <div>
+                <button type="" onclick="document.location='myto'" class="Redirect_button">TO</button>
+            </div>
+            <div>
+                <button type="" onclick="document.location='.'" class="Redirect_button">на главную</button>
+            </div>
+    </div>
+        <br><br class="Hidden_on_very_small">
+        {% if request.user.is_superuser or request.user|is_group:"managers" %}
+            <button type="" onclick="document.location='create'" class="Redirect_button">Доб. машину</button>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <button type="" onclick="document.location='create_to'" class="Redirect_button">Добавить TO</button>
+        {% endif %}
+        {% if request.user.is_superuser or request.user|is_group:"managers" or request.user|is_group:"service_organization" %}
+            <button type="" onclick="document.location='create_reclamation'" class="Redirect_button">Доб. рекламацию</button>
+        {% endif %}
+<br>
+<div class="Filter_field">
+    <div><br>
+    <strong>Фильтрация по полям</strong><br><br>
+    <form action="" method="get">
+        <select size="1" name="node">
+            <option selected disabled>Узел отказа</option>
+            {% for model in node %}
+            <option value="{{ model.name }}">{{ model.name }}</option>
+            {% endfor %}}
+        </select>
+        <select size="1" name="recovery_method">
+            <option selected disabled>Mетод восстановления</option>
+            {% for model in recovery_method %}
+            <option value="{{ model.name }}">{{ model.name }}</option>
+            {% endfor %}}
+        </select>
+        <br><br>
+        <select size="1" name="service_company">
+            <option selected disabled>Сервисная компания</option>
+            {% for model in service_company %}
+                {% if model.client.first_name %}
+                    <option value="{{ model.name }}">{{ model.client.first_name }}</option>
+                {% endif %}
+            {% endfor %}}
+        </select>
+        <br><br>
+        <button type="submit" class="Search_button">Поиск</button>
+    </form>
+    </div>
+</div>
+
+<br>
+<img class="Userpict" src="{% static 'img/reclamations.png' %}" alt="my reclamations picture"/>
+<h2>Рекламации</h2>
+
+
+<table class="table">
+    <thead>
+        <th>Машина</th>
+        <th>Дата отказа</th>
+        <th>Узел отказа</th>
+        <th class="Hidden_on_very_small">Дата восстановления</th>
+        <th class="Hidden_on_very_small">Сервисная компания</th>
+    </thead>
+        <tbody>
+            {% for reclamation in reclamations %}
+            <tr onclick="document.location='reclamations/{{ reclamation.id }}'">
+                 <td>
+                        {{ reclamation.machine.factory_number }}
+                    </td>
+                    <td>
+                        {{ reclamation.date }}
+                    </td>
+                    <td>
+                        {{ reclamation.node }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ reclamation.repair_date }}
+                    </td>
+                    <td class="Hidden_on_very_small">
+                        {{ reclamation.service_company.first_name }}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" align="center"> <h3>По вашему запросу ничего не найдено</h3></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+        {% if page_obj.has_previous %}
+			<a href="?page=1">1</a>
+			{% if page_obj.previous_page_number != 1 %}
+				...
+				<a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+			{% endif %}
+		{% endif %}
+
+		{{ page_obj.number }}
+		{% if page_obj.has_next %}
+			<a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+			{% if paginator.num_pages != page_obj.next_page_number %}
+				...
+				<a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+			{% endif %}
+		{% endif %}
+</div>
+{% endblock content %}
