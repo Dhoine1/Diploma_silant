@@ -22,12 +22,13 @@ class Index(ListView):
     def get_queryset(self):
         if self.request.GET:
             queryset = super().get_queryset()
-            self.filterset = MachineFilter(self.request.GET, queryset)
-            return self.filterset.qs
         else:
-            queryset = Machine.objects.all().order_by('factory_number')
-            self.filterset = MachineFilter(self.request.GET, queryset)
-            return self.filterset.qs
+            if self.request.user.is_authenticated:
+                queryset = Machine.objects.all().order_by('factory_number')
+            else:
+                queryset = Machine.objects.none()
+        self.filterset = MachineFilter(self.request.GET, queryset)
+        return self.filterset.qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -52,20 +53,17 @@ class Mymachines(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.GET:
+            sorting = self.request.GET.get("sort_by")
             manager_group = Group.objects.get(name='managers')
             service_group = Group.objects.get(name='service_organization')
             if manager_group in self.request.user.groups.all() or self.request.user.is_superuser == 1:
-                queryset = super().get_queryset().order_by('-delivery_data')
-                self.filterset = MymachineFilter(self.request.GET, queryset)
-                return self.filterset.qs
+                queryset = super().get_queryset().order_by(sorting)
             elif service_group in self.request.user.groups.all():
-                queryset = super().get_queryset().filter(service_company__client_id=self.request.user.id).order_by('-delivery_data')
-                self.filterset = MymachineFilter(self.request.GET, queryset)
-                return self.filterset.qs
+                queryset = super().get_queryset().filter(service_company__client_id=self.request.user.id).order_by(sorting)
             else:
-                queryset = super().get_queryset().filter(client_id=self.request.user.id).order_by('-delivery_data')
-                self.filterset = MymachineFilter(self.request.GET, queryset)
-                return self.filterset.qs
+                queryset = super().get_queryset().filter(client_id=self.request.user.id).order_by(sorting)
+            self.filterset = MymachineFilter(self.request.GET, queryset)
+            return self.filterset.qs
             return queryset
         else:
             manager_group = Group.objects.get(name='managers')
@@ -119,16 +117,18 @@ class Myto(LoginRequiredMixin, ListView):
     context_object_name = 'to'
     paginate_by = 10
 
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         if self.request.GET:
+            sorting = self.request.GET.get("sort_by")
             manager_group = Group.objects.get(name='managers')
             service_group = Group.objects.get(name='service_organization')
             if manager_group in self.request.user.groups.all() or self.request.user.is_superuser == 1:
-                queryset = super().get_queryset().order_by('-date')
+                queryset = super().get_queryset().order_by(sorting)
             elif service_group in self.request.user.groups.all():
-                queryset = TO.objects.filter(machine__service_company__client_id=self.request.user.id).order_by('-date')
+                queryset = TO.objects.filter(machine__service_company__client_id=self.request.user.id).order_by(sorting)
             else:
-                queryset = TO.objects.filter(machine__client_id=self.request.user.id).order_by('-date')
+                queryset = TO.objects.filter(machine__client_id=self.request.user.id).order_by(sorting)
+
             self.filterset = TOFilter(self.request.GET, queryset)
             return self.filterset.qs
         else:
@@ -223,14 +223,15 @@ class ReclamationsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         if self.request.GET:
+            sorting = self.request.GET.get("sort_by")
             manager_group = Group.objects.get(name='managers')
             service_group = Group.objects.get(name='service_organization')
             if manager_group in self.request.user.groups.all() or self.request.user.is_superuser == 1:
-                queryset = super().get_queryset().order_by('-date')
+                queryset = super().get_queryset().order_by(sorting)
             elif service_group in self.request.user.groups.all():
-                queryset = Reclamations.objects.filter(service_company_id=self.request.user.id).order_by('-date')
+                queryset = Reclamations.objects.filter(service_company_id=self.request.user.id).order_by(sorting)
             else:
-                queryset = Reclamations.objects.filter(machine__client_id=self.request.user.id).order_by('-date')
+                queryset = Reclamations.objects.filter(machine__client_id=self.request.user.id).order_by(sorting)
             self.filterset = ReclamationsFilter(self.request.GET, queryset)
             return self.filterset.qs
         else:

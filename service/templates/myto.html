@@ -6,6 +6,14 @@
 {% endblock styles %}
 
 {% block content %}
+
+<script type="text/javascript">
+    const url_string = window.location.href;
+    const url = new URL(url_string);
+    const paramValue = url.searchParams.get("sort_by") ? url.searchParams.get("sort_by") : '-date';
+    const clearurl = window.location.href.split('?')[0]
+</script>
+
 <div class="Main_top">
     <div class="Buttons">
         <div>
@@ -52,6 +60,13 @@
                 {% endfor %}
             </select>
             <br><br>
+            <strong>Сортировать по:</strong>
+            <select size="1" name="sort_by">
+                <option selected value="date">Дата пров-ия ТО</option>
+                <option value="type__name">Вид ТО</option>
+                <option value="machine__factory_number">Зав. № машины</option>
+                <option value="organization__name">Орг. пров-ая ТО</option>
+            </select><br><br>
             <button type="submit" class="Search_button">Поиск</button>
         </form>
     </div>
@@ -103,19 +118,22 @@
     </table>
 
         {% if page_obj.has_previous %}
-			<a href="?page=1">1</a>
+			<a href='' onclick="location.href=clearurl+'?page=1&sort_by='+paramValue;return false;"> 1</a>
 			{% if page_obj.previous_page_number != 1 %}
 				...
-				<a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+				<a href='' onclick="location.href=clearurl+'?page={{ page_obj.previous_page_number }}&sort_by='+paramValue;return false;">
+				 {{ page_obj.previous_page_number }}</a>
 			{% endif %}
 		{% endif %}
 
 		{{ page_obj.number }}
 		{% if page_obj.has_next %}
-			<a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+			<a href='' onclick="location.href=clearurl+'?page={{ page_obj.next_page_number }}&sort_by='+paramValue;return false;">
+                {{ page_obj.next_page_number }}</a>
 			{% if paginator.num_pages != page_obj.next_page_number %}
 				...
-				<a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+				<a href='' onclick="location.href=clearurl+'?page={{ page_obj.paginator.num_pages }}&sort_by='+paramValue;return false;">
+                    {{ page_obj.paginator.num_pages }}</a>
 			{% endif %}
 		{% endif %}
 </div>
